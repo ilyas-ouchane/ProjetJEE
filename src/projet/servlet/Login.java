@@ -3,15 +3,19 @@ package projet.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
+import projet.beans.Hotel;
 import projet.beans.Personne;
 import projet.db.PersonneDB;
+import projet.db.ShowHotelList;
 
 /**
  * Servlet implementation class Login
@@ -19,12 +23,13 @@ import projet.db.PersonneDB;
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	 ShowHotelList hotelman = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Login() {
         super();
+        hotelman = new ShowHotelList();
         
     }
 
@@ -35,28 +40,44 @@ public class Login extends HttpServlet {
 	}
 
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PersonneDB prsdb = new PersonneDB();
-		response.setContentType("text/html");  
-		PrintWriter out = response.getWriter(); 
-		Personne prs = new Personne();
-		prs.setEmail(request.getParameter("email"));
-		prs.setPassword_prs(request.getParameter("password"));
-		String status = prsdb.validate(prs);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+	    PersonneDB prsdb = new PersonneDB();
+	    HttpSession session = request.getSession(true);	
+	    Personne prs = new Personne();
+	    String n = request.getParameter("email");
+	    session.setAttribute("email", n);
+	    String p = request.getParameter("password");
+	    session.setAttribute("password", p);
+	    prs = prsdb.find(n, p);
+	    session.setAttribute("id_manager", prs.getId_prs());
+		String status = prsdb.validate(n, p);
+		session.setAttribute("status",status);
 		try {
-			if(status.equals("success")) {
-				HttpSession session = request.getSession(true);	
+			if(status.equals("Client")) {
+					session.setAttribute("currentSessionUser",prs); 
+					request.getRequestDispatcher("/ShowHotels").forward(request, response);
+			}else if(status.equals("Manager")){
 				session.setAttribute("currentSessionUser",prs); 
-				response.sendRedirect("loginsuccess.jsp");
+				/*Hotel hotel = hotelman.getHotelManager(prs.getId_prs());
+				RequestDispatcher dispatcher = request.getRequestDispatcher("managerHotel.jsp");
+		        request.setAttribute("hm", hotel);
+		        dispatcher.forward(request, response);*/
+				response.sendRedirect("indexManager.jsp");
+				
+			}
+			else if(status.equals("password incorrect")) {
+				request.setAttribute("test", status );
+				
+				getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 			}else {
 				request.setAttribute("test", status );
-				out.print(status);
+			
 				getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 			}
-		}catch(Exception e) {
-			e.printStackTrace();
+			
+		}catch(Exception e ){
+			
 		}
-		
 		
 	}
 

@@ -17,7 +17,7 @@ public class Hotel {
 	private String description;
 	private String nbr_etoiles;
 	private String image_hotel;
-	private int id_proprietaire;
+	private int id_prs;
 	
 	
 	public Hotel() {
@@ -26,8 +26,10 @@ public class Hotel {
 	
 	
 	
+	
+	
 	public Hotel(int id_hotel, String nom_hotel, String adresse_hotel, String ville_hotel, String tel_hotel,
-			String description, String nbr_etoiles, String image_hotel) {
+			String description, String nbr_etoiles, String image_hotel, int id_prs) {
 		super();
 		this.id_hotel = id_hotel;
 		this.nom_hotel = nom_hotel;
@@ -37,8 +39,13 @@ public class Hotel {
 		this.description = description;
 		this.nbr_etoiles = nbr_etoiles;
 		this.image_hotel = image_hotel;
+		this.id_prs = id_prs;
 	}
-	
+
+
+
+
+
 	public Hotel(String ville_hotel) {
 		this.ville_hotel = ville_hotel;
 	}
@@ -97,15 +104,16 @@ public class Hotel {
 
 
 
-	public int getId_proprietaire() {
-		return id_proprietaire;
+	public int getId_prs() {
+		return id_prs;
 	}
 
 
 
-	public void setId_proprietaire(int id_proprietaire) {
-		this.id_proprietaire = id_proprietaire;
+	public void setId_prs(int id_prs) {
+		this.id_prs = id_prs;
 	}
+
 	
 	
 	

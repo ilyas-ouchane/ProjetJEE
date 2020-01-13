@@ -91,7 +91,7 @@ public class PersonneDB implements Serializable{
 		System.out.println("coll");
 		try {
 			System.out.println("hey");
-			PreparedStatement ps = cnx.prepareStatement("Insert into personne(id_prs,nom_prs,prenom_prs,email,tel_prs,type_prs,password_prs) values(?,?,?,?,?,?,?);");
+			PreparedStatement ps = cnx.prepareStatement("Insert into personne(id_prs,nom_prs,prenom_prs,email,tel_prs,password_prs,type_prs) values(?,?,?,?,?,?,?);");
 			System.out.println(ps);
 			System.out.println("hello");
 			ps.setString(1, null);
@@ -100,8 +100,8 @@ public class PersonneDB implements Serializable{
 			System.out.println("pe");
 			ps.setString(4, p.getEmail());
 			ps.setString(5, p.getTel_prs());
-			ps.setString(6, p.getType_prs());
-			ps.setString(7, p.getPassword_prs());
+			ps.setString(7, p.getType_prs());
+			ps.setString(6, p.getPassword_prs());
 			rslt =  ps.executeUpdate();
 			System.out.println("cooooool");
 		}catch(Exception e) {
@@ -114,7 +114,7 @@ public class PersonneDB implements Serializable{
 		
 		
 	}
-	//Vérifier le login
+	/*//Vérifier le login
 	public String validate(Personne p) {
 		String status = null;
 		
@@ -123,9 +123,10 @@ public class PersonneDB implements Serializable{
 			PreparedStatement ps = cnx.prepareStatement("select * from personne");
 			ResultSet st = ps.executeQuery();
 			String email = p.getEmail();
+			System.out.println(email);
 			String password = p.getPassword_prs();
-			String type = p.getType_prs();
-			System.out.println(type);
+			String nom = p.getNom_prs();
+			System.out.println(nom);
 			while(st.next()) {
 				if(email.equals(st.getString("email"))) {
 					if(password.equals(st.getString("password_prs"))) {
@@ -144,6 +145,78 @@ public class PersonneDB implements Serializable{
 		}
 		return status;
 		
+	}*/
+	
+	//find user
+	public Personne find(String email, String password) {
+		Personne p = new Personne();
+		try {
+			Connection cnt = ConnectionDB.loadDatabase();
+			PreparedStatement ps = cnt.prepareStatement("select * from personne where email=? and password_prs=?;");
+			ps.setString(1, email);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				p.setId_prs(rs.getInt("id_prs"));
+				p.setNom_prs(rs.getString("nom_prs"));
+				p.setPrenom_prs(rs.getString("prenom_prs"));
+				p.setEmail(rs.getString("email"));
+				p.setPassword_prs(rs.getString("password_prs"));
+				p.setTel_prs(rs.getString("tel_prs"));
+				p.setType_prs(rs.getString("type_prs"));
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return p;
+	}
+	
+	//valisate person
+	public String validate(String em, String password ) {
+		Personne p = new Personne();
+		String status = null;
+		try {
+			Connection cnx = ConnectionDB.loadDatabase();
+			PreparedStatement st = cnx.prepareStatement("select * from personne where email=?;");
+			System.out.println("hi");
+			st.setString(1, em);
+			ResultSet rs= st.executeQuery();
+			System.out.println("hello");
+			if(rs.next()) {
+				p.setId_prs(rs.getInt("id_prs"));
+				p.setEmail(rs.getString("email"));
+				p.setNom_prs(rs.getString("nom_prs"));
+				p.setPrenom_prs(rs.getString("prenom_prs"));
+				p.setPassword_prs(rs.getString("password_prs"));
+				p.setTel_prs(rs.getString("tel_prs"));
+				p.setType_prs(rs.getString("type_prs"));
+				if(password.equals(p.getPassword_prs())) {
+					String type = p.getType_prs();
+					int id = p.getId_prs();
+					String email= p.getEmail();
+					String nom = p.getNom_prs();
+					String prenom = p.getPrenom_prs();
+					String tel = p.getTel_prs();
+					String pass = p.getPassword_prs();
+					System.out.println(type);
+					if(type.equals("Manager")) {
+						status = "Manager";
+					}else {
+						status="Client";
+					}
+						
+				}else {
+					status="password incorrect";
+				}
+			}else {
+				status = "email incorect";
+			}
+		}catch(Exception e) {
+			System.out.println("sorry");
+			e.printStackTrace();
+		}
+		return status;
 	}
 
 }

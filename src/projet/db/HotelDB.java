@@ -98,8 +98,9 @@ public class HotelDB implements Serializable{
 				String tel = rs.getString("tel_hotel");
 				String image = rs.getString("image_hotel") ;
 				String etoiles = rs.getString("nbr_etoiles");
+				int id_manger = rs.getInt("id_prs");
 				System.out.println("cool");
-				hotel = new Hotel(id, nom, adresse, ville, tel, description, etoiles, image);
+				hotel = new Hotel(id, nom, adresse, ville, tel, description, etoiles, image,id_manger);
 				System.out.println("piw");
 			}
 		}catch(Exception e) {
@@ -117,8 +118,7 @@ public class HotelDB implements Serializable{
 		try {
 			System.out.println("hey");
 			PreparedStatement ht = cnx.prepareStatement("Insert into hotel(id_hotel,nom_hotel,ville_hotel,adresse_hotel,tel_hotel,description,nbr_etoiles,image_hotel) values(?,?,?,?,?,?,?,?);");
-			System.out.println(ht);
-			System.out.println("hello");
+			
 			ht.setString(1, null);
 			ht.setString(2, h.getNom_hotel());
 			ht.setString(3, h.getVille_hotel());

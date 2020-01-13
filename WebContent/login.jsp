@@ -28,13 +28,7 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-  			<% 
-            String attribut = (String)(request.getAttribute("test"));
-            if(attribut != null){
-            	System.out.print(attribut);
-            }
-            
-            %>
+  		
     
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
@@ -71,7 +65,7 @@
 
     <section class="ftco-section contact-section ftco-degree-bg">
       <div class="container">
-          <center>
+       
         <div class="row block-9">
           <div class="col-md-6 order-md-last pr-md-5"> 
             <form action="Login" method="post">
@@ -90,7 +84,7 @@
 
           
         </div>
-               </center>
+              
       </div>
     </section>
 

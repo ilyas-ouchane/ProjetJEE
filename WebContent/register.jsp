@@ -82,7 +82,7 @@
                 <input type="text"  name="phone" class="form-control" placeholder="Your Phone Number">
               </div>  
               <div class="form-group">
-                  <select  name="type">
+                  <select  name="type" >
                       <option value="Manager">Manager</option>
                       <option value="Client">Client</option>
                   </select>

@@ -29,7 +29,6 @@ public class SearchHotels extends HttpServlet {
        
     public SearchHotels() {
         super();
-        // TODO Auto-generated constructor stub
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	doGet(request, response);
@@ -38,7 +37,6 @@ public class SearchHotels extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HotelDB hotdb = new HotelDB();
 		response.setContentType("text/html");  
-		PrintWriter out = response.getWriter();
 		Hotel hot = new Hotel();
 		hot.setVille_hotel(request.getParameter("villeHotel")); 
 
